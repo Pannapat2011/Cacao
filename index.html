@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cacao Group - Executive Financial BI Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Kanit & Sarabun -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Sarabun', 'sans-serif'],
+                        display: ['Kanit', 'sans-serif'],
+                    },
+                    colors: {
+                        bi: {
+                            bg: '#121621',
+                            card: '#1a202c',
+                            cardLight: '#222a38',
+                            border: '#2d3748',
+                            accentBlue: '#00f2fe',
+                            accentOrange: '#ff9a9e',
+                            accentGreen: '#38ef7d',
+                            gold: '#f59e0b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Sarabun', sans-serif; background-color: #121621; color: #e2e8f0; }
+        .bi-title { font-family: 'Kanit', sans-serif; }
+        .bi-card { background-color: #1a202c; border: 1px solid #2d3748; border-radius: 0.75rem; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5); }
+        .bi-card-header { background-color: #222a38; border-bottom: 1px solid #2d3748; border-top-left-radius: 0.75rem; border-top-right-radius: 0.75rem; }
+        .glow-blue { text-shadow: 0 0 10px rgba(0, 242, 254, 0.5); }
+        .glow-green { text-shadow: 0 0 10px rgba(56, 239, 125, 0.5); }
+        .glow-orange { text-shadow: 0 0 10px rgba(245, 158, 11, 0.5); }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #121621; }
+        ::-webkit-scrollbar-thumb { background: #2d3748; border-radius: 3px; }
+        @media print {
+            .no-print { display: none !important; }
+            body { background-color: #ffffff !important; color: #000000 !important; }
+            .bi-card { background-color: #ffffff !important; border: 1px solid #cbd5e1 !important; color: #000000 !important; box-shadow: none; break-inside: avoid; }
+            .bi-card-header { background-color: #f1f5f9 !important; border-bottom: 1px solid #cbd5e1 !important; }
+            * { text-shadow: none !important; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col p-3 md:p-6">
+
+    <!-- Top Header Bar -->
+    <header class="mb-6">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between pb-4 border-b border-slate-800 gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-600 to-amber-400 flex items-center justify-center text-slate-950 font-bold text-xl shadow-lg">
+                    <i class="fa-solid fa-mug-hot"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold bi-title text-white tracking-wide flex items-center gap-2">
+                        CACAO GROUP <span class="text-amber-400 text-sm font-normal px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30">Executive BI Dashboard</span>
+                    </h1>
+                    <p class="text-xs text-slate-400">การวิเคราะห์งบการเงิน กลุ่มบริษัท คาเคาโอ้-โกโก้ จำกัด (มหาชน) & บริษัท คาเคา ซีเอสอี จำกัด (2565 - 2568)</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 no-print">
+                <button onclick="window.print()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-semibold border border-slate-700 transition flex items-center gap-2">
+                    <i class="fa-solid fa-print"></i> พิมพ์ / พิมพ์เป็น PDF
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- TOP SECTION: KPI High-Impact Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
+        <!-- Card 1: บมจ. คาเคาโอ้-โกโก้ -->
+        <div class="bi-card p-4 relative overflow-hidden">
+            <div class="bi-card-header -mx-4 -mt-4 p-3 px-4 mb-3 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-building text-amber-400 text-sm"></i>
+                    <span class="text-xs font-bold text-white tracking-wider">บมจ. คาเคาโอ้-โกโก้ (ล่าสุดปี 2567)</span>
+                </div>
+                <span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded">PLC Entity</span>
+            </div>
+            <div class="grid grid-cols-3 gap-2 text-center my-2">
+                <div>
+                    <div class="text-[11px] text-slate-400">รายได้ขาย</div>
+                    <div class="text-lg font-bold text-white bi-title glow-blue">26.31M</div>
+                    <div class="text-[10px] text-rose-400 flex items-center justify-center gap-1"><i class="fa-solid fa-arrow-down"></i> -31.3%</div>
+                </div>
+                <div>
+                    <div class="text-[11px] text-slate-400">ขาดทุนสุทธิ</div>
+                    <div class="text-lg font-bold text-rose-400 bi-title">-3.88L</div>
+                    <div class="text-[10px] text-rose-400 flex items-center justify-center gap-1"><i class="fa-solid fa-arrow-down"></i> -183%</div>
+                </div>
+                <div>
+                    <div class="text-[11px] text-slate-400">สินค้าคงเหลือ</div>
+                    <div class="text-lg font-bold text-amber-400 bi-title glow-orange">5.35M</div>
+                    <div class="text-[10px] text-amber-400">86.2% สินทรัพย์</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2: บจ. คาเคา ซีเอสอี -->
+        <div class="bi-card p-4 relative overflow-hidden">
+            <div class="bi-card-header -mx-4 -mt-4 p-3 px-4 mb-3 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-leaf text-emerald-400 text-sm"></i>
+                    <span class="text-xs font-bold text-white tracking-wider">บจ. คาเคา ซีเอสอี (ปี 2568)</span>
+                </div>
+                <span class="text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-800 px-2 py-0.5 rounded">CSE Entity</span>
+            </div>
+            <div class="grid grid-cols-3 gap-2 text-center my-2">
+                <div>
+                    <div class="text-[11px] text-slate-400">รายได้บริการ</div>
+                    <div class="text-lg font-bold text-white bi-title glow-blue">1.04M</div>
+                    <div class="text-[10px] text-emerald-400"><i class="fa-solid fa-circle-check"></i> ปีแรก</div>
+                </div>
+                <div>
+                    <div class="text-[11px] text-slate-400">กำไรขั้นต้น</div>
+                    <div class="text-lg font-bold text-emerald-400 bi-title glow-green">69.11%</div>
+                    <div class="text-[10px] text-emerald-400">715,306 บาท</div>
+                </div>
+                <div>
+                    <div class="text-[11px] text-slate-400">กำไรสุทธิ</div>
+                    <div class="text-lg font-bold text-emerald-400 bi-title glow-green">218K</div>
+                    <div class="text-[10px] text-emerald-400">Net Margin 21%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3: Line Chart Trend -->
+        <div class="bi-card p-4">
+            <div class="bi-card-header -mx-4 -mt-4 p-3 px-4 mb-3 flex justify-between items-center">
+                <span class="text-xs font-bold text-white tracking-wider"><i class="fa-solid fa-chart-line text-sky-400 mr-2"></i>แนวโน้มรายได้ & กำไรสุทธิ</span>
+                <span class="text-[10px] text-slate-400">Trend</span>
+            </div>
+            <div class="h-20 w-full relative">
+                <canvas id="chartTrend"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW SECTION: Detailed Doughnut Charts (Financial & Expense Structure) -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
+        <!-- Financial Structure (Debt vs Equity) -->
+        <div class="bi-card p-4">
+            <div class="bi-card-header -mx-4 -mt-4 p-3 px-4 mb-3 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-scale-balanced text-amber-400 text-sm"></i>
+                    <h3 class="text-xs font-bold text-white uppercase tracking-wider">โครงสร้างทางการเงิน (หนี้สิน vs ส่วนของผู้ถือหุ้น)</h3>
+                </div>
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+                <div class="flex flex-col items-center">
+                    <span class="text-[10px] text-slate-400 mb-2">บมจ. 2566</span>
+                    <div class="h-24 w-full relative"><canvas id="eqChart66"></canvas></div>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-[10px] text-slate-400 mb-2">บมจ. 2567</span>
+                    <div class="h-24 w-full relative"><canvas id="eqChart67"></canvas></div>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-[10px] text-emerald-400 mb-2 font-bold">บจ. 2568 (CSE)</span>
+                    <div class="h-24 w-full relative"><canvas id="eqChart68"></canvas></div>
+                </div>
+            </div>
+            <div class="flex justify-center gap-4 mt-3 text-[10px] text-slate-400">
+                <div class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-rose-500"></span> หนี้สิน</div>
+                <div class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-sky-400"></span> ส่วนของผู้ถือหุ้น</div>
+            </div>
+        </div>
+
+        <!-- Expense Structure (Cost Breakdown) -->
+        <div class="bi-card p-4">
+            <div class="bi-card-header -mx-4 -mt-4 p-3 px-4 mb-3 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-chart-pie text-emerald-400 text-sm"></i>
+                    <h3 class="text-xs font-bold text-white uppercase tracking-wider">โครงสร้างค่าใช้จ่ายดำเนินงาน</h3>
+                </div>
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+                <div class="flex flex-col items-center">
+                    <span class="text-[10px] text-slate-400 mb-2">บมจ. 2566</span>
+                    <div class="h-24 w-full relative"><canvas id="expChart66"></canvas></div>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-[10px] text-slate-400 mb-2">บมจ. 2567</span>
+                    <div class="h-24 w-full relative"><canvas id="expChart67"></canvas></div>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="text-[10px] text-emerald-400 mb-2 font-bold">บจ. 2568 (CSE)</span>
+                    <div class="h-24 w-full relative"><canvas id="expChart68"></canvas></div>
+                </div>
+            </div>
+            <div class="flex justify-center gap-4 mt-3 text-[10px] text-slate-400">
+                <div class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-amber-400"></span> ต้นทุนขาย</div>
+                <div class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-emerald-400"></span> ค่าใช้จ่ายขาย</div>
+                <div class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-purple-400"></span> ค่าใช้จ่ายบริหาร</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MIDDLE SECTION: Split Panels (Table & Analysis) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 mb-6">
+        <!-- LEFT PANEL: Financial Table -->
+        <div class="lg:col-span-8 bi-card p-4 flex flex-col justify-between">
+            <div class="bi-card-header -mx-4 -mt-4 p-3 px-4 mb-3 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-table text-amber-400 text-sm"></i>
+                    <h3 class="text-xs font-bold text-white uppercase tracking-wider">ตารางสรุปเปรียบเทียบงบการเงินรวม</h3>
+                </div>
+                <span class="text-[10px] text-slate-400">2565 - 2568 (บาท)</span>
+            </div>
+
+            <div class="overflow-x-auto my-2">
+                <table class="w-full text-xs text-left text-slate-300">
+                    <thead class="text-[11px] text-slate-300 uppercase bg-slate-800/80 border-b border-slate-700">
+                        <tr>
+                            <th class="py-2.5 px-3 font-semibold">รายการงบการเงิน</th>
+                            <th class="py-2.5 px-3 text-right">บมจ. 2565</th>
+                            <th class="py-2.5 px-3 text-right">บมจ. 2566</th>
+                            <th class="py-2.5 px-3 text-right">บมจ. 2567</th>
+                            <th class="py-2.5 px-3 text-right text-emerald-400 bg-emerald-950/40">บจ. 2568 (CSE)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800 text-[11px]">
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="py-2 px-3 font-medium text-white">รายได้จากการขาย/บริการ</td>
+                            <td class="py-2 px-3 text-right">1,835,000.00</td>
+                            <td class="py-2 px-3 text-right text-sky-300">38,290,960.17</td>
+                            <td class="py-2 px-3 text-right text-sky-300">26,306,670.63</td>
+                            <td class="py-2 px-3 text-right font-bold text-emerald-400 bg-emerald-950/20">1,035,070.34</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="py-2 px-3 text-slate-400">ต้นทุนขาย/บริการ</td>
+                            <td class="py-2 px-3 text-right">566,000.00</td>
+                            <td class="py-2 px-3 text-right">31,920,283.92</td>
+                            <td class="py-2 px-3 text-right">21,711,393.84</td>
+                            <td class="py-2 px-3 text-right bg-emerald-950/20">319,763.78</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40 bg-slate-800/20 font-semibold">
+                            <td class="py-2 px-3 text-amber-300">กำไรขั้นต้น</td>
+                            <td class="py-2 px-3 text-right text-emerald-400">1,269,000 (69%)</td>
+                            <td class="py-2 px-3 text-right text-amber-300">6,370,676 (17%)</td>
+                            <td class="py-2 px-3 text-right text-amber-300">4,595,276 (17%)</td>
+                            <td class="py-2 px-3 text-right font-bold text-emerald-400 bg-emerald-950/40">715,306 (69%)</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="py-2 px-3 text-slate-400">ค่าใช้จ่ายรวม (ขายและบริหาร)</td>
+                            <td class="py-2 px-3 text-right">1,059,002.91</td>
+                            <td class="py-2 px-3 text-right">6,508,360.93</td>
+                            <td class="py-2 px-3 text-right">4,629,530.98</td>
+                            <td class="py-2 px-3 text-right bg-emerald-950/20">498,308.69</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40 border-t border-slate-700 font-bold bg-slate-800/60 text-xs">
+                            <td class="py-2.5 px-3 text-white">กำไร (ขาดทุน) สุทธิ</td>
+                            <td class="py-2.5 px-3 text-right text-emerald-400">168,006.60</td>
+                            <td class="py-2.5 px-3 text-right text-rose-400">-136,951.32</td>
+                            <td class="py-2.5 px-3 text-right text-rose-400">-388,198.84</td>
+                            <td class="py-2.5 px-3 text-right text-emerald-400 bg-emerald-950/60">218,074.49</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40 border-t border-slate-700">
+                            <td class="py-2 px-3 font-semibold text-slate-300">สินทรัพย์รวม</td>
+                            <td class="py-2 px-3 text-right">1,344,117.40</td>
+                            <td class="py-2 px-3 text-right">5,243,380.21</td>
+                            <td class="py-2 px-3 text-right">6,209,058.33</td>
+                            <td class="py-2 px-3 text-right bg-emerald-950/20">359,112.59</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="py-2 px-3 font-semibold text-slate-300">หนี้สินรวม</td>
+                            <td class="py-2 px-3 text-right">176,110.80</td>
+                            <td class="py-2 px-3 text-right">812,324.93</td>
+                            <td class="py-2 px-3 text-right text-rose-300">2,166,201.89</td>
+                            <td class="py-2 px-3 text-right bg-emerald-950/20">41,038.10</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-2 p-2.5 bg-rose-500/10 border border-rose-500/20 rounded-lg text-[11px] text-rose-300 flex items-start gap-2">
+                <i class="fa-solid fa-triangle-exclamation text-rose-400 mt-0.5"></i>
+                <div>
+                    <strong>ข้อสังเกตจากผู้สอบบัญชี:</strong> งบปี 66-67 มีการแก้ไขข้อผิดพลาดทางบัญชีเกี่ยวกับการบันทึกทุนและเงินให้กู้ยืมระยะสั้นสูงเกินจริงจำนวน 95.6 ล้านบาท (ปรับปรุงเรียบร้อยแล้วในงบฉบับนี้)
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT PANEL: Action Plan -->
+        <div class="lg:col-span-4 bi-card p-4">
+            <div class="bi-card-header -mx-4 -mt-4 p-3 px-4 mb-3 flex justify-between items-center">
+                <span class="text-xs font-bold text-white tracking-wider"><i class="fa-solid fa-compass text-amber-400 mr-2"></i>Strategic Action Plan</span>
+            </div>
+            <div class="flex flex-col gap-3 text-xs">
+                <div class="p-3 bg-slate-800/60 border border-slate-700/60 rounded-xl">
+                    <div class="font-bold text-rose-400 mb-1 flex items-center justify-between">
+                        <span>1. จัดการสภาพคล่อง บมจ.</span>
+                        <i class="fa-solid fa-droplet text-rose-500"></i>
+                    </div>
+                    <p class="text-[11px] text-slate-300 leading-tight">Quick Ratio ต่ำเพียง 0.30 เท่า สินค้าคงเหลือบวมถึง 5.35 ล้านบาท ต้องเร่งจัดโปรโมชั่นระบายสต๊อกเพื่อเพิ่มกระแสเงินสด</p>
+                </div>
+                <div class="p-3 bg-slate-800/60 border border-slate-700/60 rounded-xl">
+                    <div class="font-bold text-sky-400 mb-1 flex items-center justify-between">
+                        <span>2. โครงสร้างหนี้ระยะสั้น</span>
+                        <i class="fa-solid fa-file-invoice-dollar text-sky-500"></i>
+                    </div>
+                    <p class="text-[11px] text-slate-300 leading-tight">ปี 67 บมจ. มีต้นทุนทางการเงินสูงขึ้น เจรจาปรับโครงสร้างหนี้บุคคลเกี่ยวข้องกัน (1.04 ล้านบาท) เพื่อลดภาระดอกเบี้ย</p>
+                </div>
+                <div class="p-3 bg-slate-800/60 border border-slate-700/60 rounded-xl">
+                    <div class="font-bold text-emerald-400 mb-1 flex items-center justify-between">
+                        <span>3. ขยายผลโมเดล CSE</span>
+                        <i class="fa-solid fa-leaf text-emerald-500"></i>
+                    </div>
+                    <p class="text-[11px] text-slate-300 leading-tight">บจ. คาเคา ซีเอสอี (ปี 68) มีอัตรากำไรขั้นต้นสูงถึง 69% และหนี้สินต่ำมาก ควรให้น้ำหนักในการผลักดันงานบริการวิสาหกิจชุมชนเพิ่ม</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-auto pt-4 border-t border-slate-800 text-center text-[11px] text-slate-500 no-print">
+        <p>© 2569 Cacao Group Executive BI Dashboard | Dark Theme Edition (Detailed Comparison)</p>
+    </footer>
+
+    <!-- Chart.js Script Initializations -->
+    <script>
+        Chart.defaults.color = '#94a3b8';
+        Chart.defaults.borderColor = '#2d3748';
+        Chart.defaults.font.family = "'Sarabun', sans-serif";
+
+        window.addEventListener('DOMContentLoaded', () => {
+            
+            // Common Config for Doughnuts
+            const doughnutOptions = { 
+                responsive: true, 
+                maintainAspectRatio: false, 
+                plugins: { 
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return ' ' + context.raw.toLocaleString('th-TH', {minimumFractionDigits: 0}) + ' บาท';
+                            }
+                        }
+                    }
+                } 
+            };
+
+            // ---- Financial Structure (Debt vs Equity) ----
+            const eqColors = ['#f43f5e', '#38bdf8']; // Rose, Sky
+            new Chart(document.getElementById('eqChart66').getContext('2d'), {
+                type: 'doughnut', data: { labels: ['หนี้สิน', 'ส่วนของผู้ถือหุ้น'], datasets: [{ data: [812324.93, 4431055.28], backgroundColor: eqColors, borderWidth: 1, borderColor: '#1a202c' }] }, options: doughnutOptions
+            });
+            new Chart(document.getElementById('eqChart67').getContext('2d'), {
+                type: 'doughnut', data: { labels: ['หนี้สิน', 'ส่วนของผู้ถือหุ้น'], datasets: [{ data: [2166201.89, 4042856.44], backgroundColor: eqColors, borderWidth: 1, borderColor: '#1a202c' }] }, options: doughnutOptions
+            });
+            new Chart(document.getElementById('eqChart68').getContext('2d'), {
+                type: 'doughnut', data: { labels: ['หนี้สิน', 'ส่วนของผู้ถือหุ้น'], datasets: [{ data: [41038.10, 318074.49], backgroundColor: eqColors, borderWidth: 1, borderColor: '#1a202c' }] }, options: doughnutOptions
+            });
+
+            // ---- Expense Structure (COGS vs Selling vs Admin) ----
+            const expColors = ['#fbbf24', '#34d399', '#c084fc']; // Amber, Emerald, Purple
+            new Chart(document.getElementById('expChart66').getContext('2d'), {
+                type: 'doughnut', data: { labels: ['ต้นทุนขาย', 'ค่าใช้จ่ายขาย', 'ค่าใช้จ่ายบริหาร'], datasets: [{ data: [31920283.92, 4002518.72, 2505842.21], backgroundColor: expColors, borderWidth: 1, borderColor: '#1a202c' }] }, options: doughnutOptions
+            });
+            new Chart(document.getElementById('expChart67').getContext('2d'), {
+                type: 'doughnut', data: { labels: ['ต้นทุนขาย', 'ค่าใช้จ่ายขาย', 'ค่าใช้จ่ายบริหาร'], datasets: [{ data: [21711393.84, 2500740.79, 2128790.19], backgroundColor: expColors, borderWidth: 1, borderColor: '#1a202c' }] }, options: doughnutOptions
+            });
+            new Chart(document.getElementById('expChart68').getContext('2d'), {
+                type: 'doughnut', data: { labels: ['ต้นทุนขาย', 'ค่าใช้จ่ายขาย', 'ค่าใช้จ่ายบริหาร'], datasets: [{ data: [319763.78, 39350.92, 458957.77], backgroundColor: expColors, borderWidth: 1, borderColor: '#1a202c' }] }, options: doughnutOptions
+            });
+
+            // ---- Line Chart Trend ----
+            new Chart(document.getElementById('chartTrend').getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: ['2565', '2566', '2567', '2568 (CSE)'],
+                    datasets: [
+                        {
+                            label: 'รายได้รวม (ล้านบาท)',
+                            data: [1.84, 38.29, 26.31, 1.04],
+                            borderColor: '#00f2fe',
+                            backgroundColor: 'rgba(0, 242, 254, 0.1)',
+                            fill: true,
+                            tension: 0.3,
+                            pointBackgroundColor: '#00f2fe'
+                        },
+                        {
+                            label: 'กำไร (ขาดทุน) สุทธิ (แสนบาท)',
+                            data: [1.68, -1.37, -3.88, 2.18],
+                            borderColor: '#38ef7d',
+                            backgroundColor: 'transparent',
+                            borderDash: [5, 5],
+                            tension: 0.3,
+                            pointBackgroundColor: '#38ef7d'
+                        }
+                    ]
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { 
+                        legend: { position: 'right', labels: { boxWidth: 10, font: { size: 10 } } } 
+                    },
+                    scales: {
+                        y: { display: false },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
